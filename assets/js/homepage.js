@@ -14,12 +14,21 @@ var getUserRepos = function (user) {
     //then() method returns a promise
     //after fetching, response was formatted to JSON with json() method
     //function(data) is a callback function that captures tha actual data
-    fetch(apiUrl).then(function (response) {
-        response.json().then(function (data) {
-            //send data to displayRepos function
-            displayRepos(data, user);
+    fetch(apiUrl)
+        .then(function (response) {
+            // request was successful
+            if (response.ok) {
+                response.json().then(function (data) {
+                    displayRepos(data, user);
+                });
+            } else {
+                alert('Error: GitHub User Not Found');
+            }
         })
-    });
+        .catch(function (error) {
+            // Notice this `.catch()` getting chained onto the end of the `.then()` method
+            alert("Unable to connect to GitHub");
+        });
 };
 
 
@@ -45,6 +54,12 @@ userFormEl.addEventListener("submit", formSubmitHandler);
 
 
 var displayRepos = function (repos, searchTerm) {
+    // check if api returned any repos
+    if (repos.length === 0) {
+        repoContainerEl.textContent = "No repositories found.";
+        return;
+    }
+
     // clear old content
     repoContainerEl.textContent = "";
     repoSearchTerm.textContent = searchTerm;
