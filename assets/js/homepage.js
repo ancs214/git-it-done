@@ -7,7 +7,7 @@ var repoSearchTerm = document.querySelector("#repo-search-term");
 
 //REQUEST DATA FROM SERVER
 var getUserRepos = function (user) {
-    //format github api url
+    //format github api url: fetch function will retrieve SPECIFIC user's repos
     var apiUrl = "https://api.github.com/users/" + user + "/repos";
 
     //make a request to the url
