@@ -6,15 +6,21 @@ var repoNameEl = document.querySelector("#repo-name");
 
 //GET REPO NAME 
 var getRepoName = function () {
-    //console.log document.location to see properties...search was the property that contained our query parameter 
+    //console.log document.location to see properties..."search" was the property that contained our query parameter 
+    //grab repo name from url query string
     var queryString = document.location.search;
     //using string method split() to obtain just the repo name from our querystring
     //split ?repo=ancs214/ANCS at the "=" to make two arrays, then accessed our second array at index 1 to get "ancs214/ANCS"
     var repoName = queryString.split("=")[1];
+    if (repoName) {
+    //update header span element text to display repo name
+    repoNameEl.textContent = repoName;
     //run getRepoIssues function with the query string as a parameter
     getRepoIssues(repoName);
-    //update header span element text to contain repo name
-    repoNameEl.textContent = repoName;
+    } else {
+        //if no repo was given, redirect to the homepage
+        document.location.replace("./index.html");
+    }
 }
 
 
@@ -37,8 +43,10 @@ var getRepoIssues = function (repo) {
                 });
             }
             else {
-                alert("There was a problem with your request!");
-                console.log(response);
+                // alert("There was a problem with your request!");
+                // console.log(response);
+                //if not successful, redirect to homepage
+                document.location.replace("./index.html");
             }
         });
 }
