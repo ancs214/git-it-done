@@ -1,5 +1,22 @@
 var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");
+//span element for repo name
+var repoNameEl = document.querySelector("#repo-name");
+
+
+//GET REPO NAME 
+var getRepoName = function () {
+    //console.log document.location to see properties...search was the property that contained our query parameter 
+    var queryString = document.location.search;
+    //using string method split() to obtain just the repo name from our querystring
+    //split ?repo=ancs214/ANCS at the "=" to make two arrays, then accessed our second array at index 1 to get "ancs214/ANCS"
+    var repoName = queryString.split("=")[1];
+    //run getRepoIssues function with the query string as a parameter
+    getRepoIssues(repoName);
+    //update header span element text to contain repo name
+    repoNameEl.textContent = repoName;
+}
+
 
 
 //GET REPOSITORY ISSUES FUNCTION
@@ -15,17 +32,16 @@ var getRepoIssues = function (repo) {
                     displayIssues(data);
                     //check if api has paginated issues
                     if (response.headers.get("Link")) {
-                       displayWarning(repo);
+                        displayWarning(repo);
                     }
                 });
             }
             else {
                 alert("There was a problem with your request!");
+                console.log(response);
             }
         });
 }
-
-getRepoIssues("facebook/react");
 
 
 //DISPLAY REPOSITORY ISSUES FUNCTION
@@ -88,3 +104,8 @@ var displayWarning = function (repo) {
     // append to warning container
     limitWarningEl.appendChild(linkEl);
 };
+
+
+
+getRepoIssues();
+getRepoName();
