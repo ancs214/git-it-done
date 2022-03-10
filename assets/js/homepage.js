@@ -3,6 +3,7 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
+var languageButtonsEl = document.querySelector('#language-buttons');
 
 
 //REQUEST DATA FROM SERVER
@@ -53,6 +54,7 @@ userFormEl.addEventListener("submit", formSubmitHandler);
 
 
 
+//function to obtain list of repos
 var displayRepos = function (repos, searchTerm) {
     // check if api returned any repos
     if (repos.length === 0) {
@@ -106,3 +108,36 @@ var displayRepos = function (repos, searchTerm) {
     }
 
 };
+
+//function to get featured repos
+var getFeaturedRepos = function (language) {
+    //accepts a language parameter, creates an API endpoint
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+    //make request to that API endpoint 
+    fetch(apiUrl).then(function (response) {
+        if (response.ok) {
+            response.json().then(function (data) {
+                //run function to get list of repos and pass in data.items, language as argument
+                displayRepos(data.items, language);
+            });
+        } else {
+            alert('Error: GitHub User Not Found');
+        }
+    });
+};
+
+//TIP: we can test getFeaturedRepos by entering getFeaturedRepos("javascript") in the console, then navigate to Network tab and Preview to view the response
+
+
+var buttonClickHandler = function(event) {
+    //browser's event object will have a target property that tells us exactly which html element was interacted with to create the event
+    var language = event.target.getAttribute("data-language");
+    //if a language was clicked, call getFeaturedRepos passing the variable language as parameter
+    if (language) {
+        getFeaturedRepos(language);
+        //clear old content
+        repoContainerEl.textContent = "";
+    }
+}
+
+languageButtonsEl.addEventListener("click", buttonClickHandler);
