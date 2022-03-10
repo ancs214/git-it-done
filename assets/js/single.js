@@ -12,6 +12,7 @@ var getRepoName = function () {
     //using string method split() to obtain just the repo name from our querystring
     //split ?repo=ancs214/ANCS at the "=" to make two arrays, then accessed our second array at index 1 to get "ancs214/ANCS"
     var repoName = queryString.split("=")[1];
+
     if (repoName) {
     //update header span element text to display repo name
     repoNameEl.textContent = repoName;
@@ -41,12 +42,11 @@ var getRepoIssues = function (repo) {
                         displayWarning(repo);
                     }
                 });
-            }
-            else {
-                // alert("There was a problem with your request!");
-                // console.log(response);
+            } else {
+                alert("There was a problem with your request!");
+                console.log(response);
                 //if not successful, redirect to homepage
-                document.location.replace("./index.html");
+                // document.location.replace("./index.html");
             }
         });
 }
@@ -115,5 +115,5 @@ var displayWarning = function (repo) {
 
 
 
-getRepoIssues();
+
 getRepoName();
